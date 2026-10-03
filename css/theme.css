@@ -1,0 +1,47 @@
+/*
+  FILE: theme.css
+  REFERENCE: CMA-ZONE-DESIGN-V2
+  PURPOSE: Global CMA Zone colours and design tokens.
+  EDITABLE AREAS: Colour variables, shadows, borders and base text colours.
+  DEPENDENCIES: None.
+  IMPORTANT NOTES: Blue/navy dashboard direction is intentionally preserved.
+  LAST UPDATED: 2026-10-04
+*/
+
+:root {
+  --navy: #17243a;
+  --blue: #075fd6;
+  --blue-dark: #0a43b8;
+  --blue-soft: #eaf3ff;
+
+  --green: #18b86a;
+  --green-soft: #e9f9f0;
+  --purple: #8d3eea;
+  --orange: #f39a22;
+
+  --red: #d83d52;
+  --page: #f5f8fc;
+  --card: #ffffff;
+  --text: #111827;
+  --text-soft: #4d5b70;
+  --muted: #78869a;
+  --line: #dfe6ef;
+  --track: #e3eaf3;
+
+  --shadow-sm: 0 4px 14px rgba(31,54,84,.06);
+  --shadow-md: 0 8px 24px rgba(31,54,84,.09);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button, input, select, textarea { font: inherit; }
+.hidden { display: none !important; }
