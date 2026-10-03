@@ -1,0 +1,79 @@
+# ============================================================
+# FILE: .github/workflows/cma-zone.yml
+# REFERENCE: CMA-ZONE-GITHUB-ACTIONS-V1
+# PURPOSE: Automatically validate and deploy CMA Zone website
+#          whenever changes are pushed to the main branch.
+#
+# EDITABLE AREAS:
+# - workflow name
+# - branch name
+# - deployment configuration
+#
+# DEPENDENCIES:
+# - GitHub repository
+# - GitHub Pages
+#
+# IMPORTANT:
+# - This workflow is for the current HTML/CSS/JS CMA Zone website.
+# - No Node.js or Flutter build is required.
+# - Keep this file inside .github/workflows/
+#
+# LAST UPDATED: 2026-10-04
+# ============================================================
+
+name: CMA Zone
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "cma-zone-pages"
+  cancel-in-progress: true
+
+jobs:
+
+  deploy:
+    name: Deploy CMA Zone
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+
+      # --------------------------------------------------------
+      # 1. Download repository files
+      # --------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --------------------------------------------------------
+      # 2. Configure GitHub Pages
+      # --------------------------------------------------------
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      # --------------------------------------------------------
+      # 3. Upload the website
+      # --------------------------------------------------------
+      - name: Upload CMA Zone
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      # --------------------------------------------------------
+      # 4. Deploy website
+      # --------------------------------------------------------
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
