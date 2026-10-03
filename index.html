@@ -1,1 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    FILE: index.html
+    REFERENCE: CMA-ZONE-HOME-FINAL-V1
+    PURPOSE: Final CMA Zone student Home/Dashboard page.
+    EDITABLE AREAS: Dashboard section order, navigation labels and onboarding copy.
+    DEPENDENCIES: css/theme.css, css/home.css, js/academic-structure.js, js/home.js
+    IMPORTANT NOTES:
+    - New students start with zero progress and see onboarding before dashboard data.
+    - Existing student progress is loaded from the CMA Zone data layer/local demo storage.
+    - No demo progress values are hard-coded into the dashboard.
+    LAST UPDATED: 2026-10-04
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#17243a">
+  <title>CMA Zone — Home</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
 
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#home" aria-label="CMA Zone Home">
+        <div class="brand-logo"><span></span><span></span><span></span></div>
+        <div>
+          <div class="brand-title">CMA Zone</div>
+          <div class="brand-tagline">Plan • Study • Practice • Succeed</div>
+        </div>
+      </a>
+
+      <div class="attempt-selector">
+        <button id="attemptButton" class="attempt-button" type="button" aria-label="Change preparation">
+          <span>
+            <strong id="headerPreparation">Set your preparation</strong>
+            <small id="headerAttempt">Choose level, group and attempt</small>
+          </span>
+          <span class="chevron">⌄</span>
+        </button>
+      </div>
+
+      <div class="top-actions">
+        <button class="top-icon" type="button" aria-label="Notifications">♧<span class="notification-dot"></span></button>
+        <button class="avatar" type="button" aria-label="Profile">R</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="home" class="dashboard">
+
+    <!-- FIRST-LOGIN ONBOARDING -->
+    <section id="onboarding" class="onboarding hidden">
+      <div class="onboarding-copy">
+        <div class="onboarding-badge">WELCOME TO CMA ZONE</div>
+        <h1>Set up your CMA preparation</h1>
+        <p>Choose your CMA level, group and attempt. Your dashboard will then track your own preparation.</p>
+      </div>
+
+      <div class="onboarding-form">
+        <label class="field">
+          <span>CMA Level</span>
+          <select id="setupLevel"></select>
+        </label>
+
+        <label class="field">
+          <span>Group</span>
+          <select id="setupGroup"></select>
+        </label>
+
+        <label class="field">
+          <span>Attempt</span>
+          <select id="setupAttempt"></select>
+        </label>
+
+        <button id="startPreparation" class="primary-button" type="button">Start Preparation</button>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <div id="dashboardContent">
+
+      <section class="hero-progress">
+        <div class="exam-box">
+          <div class="calendar-icon" aria-hidden="true">
+            <div class="calendar-head"></div>
+            <div class="calendar-grid">
+              <i></i><i></i><i></i>
+              <i></i><i></i><i></i>
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+          <div>
+            <span class="hero-label">Exam in</span>
+            <strong id="daysRemaining">—</strong>
+            <span id="examDate" class="hero-date">Set your preparation first</span>
+          </div>
+        </div>
+
+        <div class="hero-divider"></div>
+
+        <div class="hero-main">
+          <div class="hero-title-row">
+            <div>
+              <h1 id="heroTitle">Your CMA Preparation</h1>
+              <span>Overall Syllabus Completed</span>
+            </div>
+            <strong id="heroPercent">0%</strong>
+          </div>
+
+          <div class="hero-progress-track">
+            <div id="heroProgress" class="hero-progress-fill" style="width:0%"></div>
+          </div>
+
+          <div class="hero-bottom">
+            <span id="topicCount">0 / 0 topics</span>
+            <button class="link-button" type="button" onclick="openSection('syllabus')">View syllabus →</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="metric-grid">
+        <article class="metric-card green">
+          <div class="metric-icon">▮</div>
+          <div class="metric-label">Syllabus</div>
+          <strong id="metricSyllabus">0%</strong>
+          <div class="mini-track"><div id="metricSyllabusBar" style="width:0%"></div></div>
+          <div class="metric-detail" id="metricSyllabusDetail">0 / 0 topics</div>
+        </article>
+
+        <article class="metric-card blue">
+          <div class="metric-icon">↻</div>
+          <div class="metric-label">Revision</div>
+          <strong id="metricRevision">0%</strong>
+          <div class="mini-track"><div id="metricRevisionBar" style="width:0%"></div></div>
+          <div class="metric-detail" id="metricRevisionDetail">0 / 0 topics</div>
+        </article>
+
+        <article class="metric-card purple">
+          <div class="metric-icon">◎</div>
+          <div class="metric-label">Tests / MCQs</div>
+          <strong id="metricTests">0%</strong>
+          <div class="mini-track"><div id="metricTestsBar" style="width:0%"></div></div>
+          <div class="metric-detail" id="metricTestsDetail">0 / 0 questions</div>
+        </article>
+
+        <article class="metric-card orange">
+          <div class="metric-icon">▥</div>
+          <div class="metric-label">Exam Readiness</div>
+          <strong id="metricReadiness">0%</strong>
+          <div class="mini-track"><div id="metricReadinessBar" style="width:0%"></div></div>
+          <div class="metric-detail" id="metricReadinessDetail">Based on your preparation</div>
+        </article>
+      </section>
+
+      <section id="syllabus" class="section-block">
+        <div class="section-heading">
+          <div>
+            <h2>Subject-wise Progress</h2>
+            <p>Track syllabus, revision and practice for each paper.</p>
+          </div>
+          <button class="link-button" type="button" onclick="showToast('Detailed subject view will open here.')">View Details →</button>
+        </div>
+        <div id="subjectGrid" class="subject-grid"></div>
+      </section>
+
+      <section class="content-grid">
+        <div class="left-column">
+
+          <section class="section-block">
+            <div class="section-heading">
+              <div>
+                <h2>Today's Plan</h2>
+                <p id="todayDate"></p>
+              </div>
+              <button class="primary-button" type="button" onclick="showToast('Task creator will open here.')">+ Add Task</button>
+            </div>
+
+            <div class="panel today-panel">
+              <div id="taskList" class="task-list"></div>
+
+              <div id="emptyPlan" class="empty-state">
+                <strong>No study tasks yet</strong>
+                <span>Add your first task when you are ready to study.</span>
+              </div>
+
+              <div class="today-summary">
+                <div class="summary-track"><div id="todaySummaryBar" class="summary-fill" style="width:0%"></div></div>
+                <strong id="todayHours">0 / 0 hrs</strong>
+                <strong id="todayPercent">0%</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-block">
+            <div class="section-heading">
+              <div>
+                <h2>Recent Activity</h2>
+                <p>Your latest CMA Zone activity.</p>
+              </div>
+              <button class="link-button" type="button" onclick="showToast('All activity will open here.')">View All →</button>
+            </div>
+            <div class="panel activity-panel" id="activityList"></div>
+          </section>
+
+        </div>
+
+        <aside class="right-column">
+
+          <section class="panel streak-card">
+            <div class="side-title">
+              <div class="fire-icon">🔥</div>
+              <div>
+                <span>Study Streak</span>
+                <strong id="streakValue">0 Days</strong>
+              </div>
+            </div>
+            <p id="streakMessage">Start your first study day.</p>
+            <div id="weekRow" class="week-row"></div>
+          </section>
+
+          <section class="panel revision-card">
+            <div class="side-heading">
+              <div>
+                <span class="side-heading-icon clock">◷</span>
+                <strong>Next Revision Due</strong>
+              </div>
+              <button class="link-button" type="button" onclick="showToast('Revision list will open here.')">View All →</button>
+            </div>
+            <strong id="revisionCount" class="revision-count">0 Topics</strong>
+            <ul id="revisionList" class="revision-list"></ul>
+          </section>
+
+          <section class="panel study-now-card">
+            <div class="side-heading">
+              <div>
+                <span class="bulb-icon">💡</span>
+                <strong>What Should I Study Now?</strong>
+              </div>
+              <button class="primary-button small" type="button" onclick="showToast('Your study plan will open here.')">Get Plan</button>
+            </div>
+
+            <div id="studyRecommendation" class="recommendation empty-recommendation">
+              <strong>Build your preparation data first.</strong>
+              <p>Once you study, revise and practice, CMA Zone can recommend your next activity.</p>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <h2>Study Activity</h2>
+            <p>Your recorded study hours during the last 7 days.</p>
+          </div>
+          <strong id="chartTotal" class="chart-total">0 hrs</strong>
+        </div>
+        <div class="panel chart-panel">
+          <div id="studyChart" class="bar-chart"></div>
+          <div id="chartAxis" class="chart-axis"></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <h2>Exam Readiness</h2>
+            <p>Calculated from your syllabus, revision and practice data.</p>
+          </div>
+        </div>
+
+        <div class="panel readiness-panel">
+          <div class="readiness-row">
+            <div><span>Syllabus Completion</span><strong id="readinessSyllabus">0%</strong></div>
+            <div class="readiness-track"><i id="readinessSyllabusBar" style="width:0%"></i></div>
+          </div>
+
+          <div class="readiness-row">
+            <div><span>Revision Coverage</span><strong id="readinessRevision">0%</strong></div>
+            <div class="readiness-track blue-track"><i id="readinessRevisionBar" style="width:0%"></i></div>
+          </div>
+
+          <div class="readiness-row">
+            <div><span>Test / MCQ Practice</span><strong id="readinessTests">0%</strong></div>
+            <div class="readiness-track purple-track"><i id="readinessTestsBar" style="width:0%"></i></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Mobile navigation">
+    <button class="bottom-nav-item active" type="button" onclick="openSection('home')"><span>⌂</span><b>Home</b></button>
+    <button class="bottom-nav-item" type="button" onclick="openSection('syllabus')"><span>▤</span><b>Syllabus</b></button>
+    <button class="bottom-nav-item" type="button" onclick="showToast('Planner will open here.')"><span>▦</span><b>Planner</b></button>
+    <button class="bottom-nav-item" type="button" onclick="showToast('Practice will open here.')"><span>□</span><b>Practice</b></button>
+    <button class="bottom-nav-item" type="button" onclick="showToast('Analytics will open here.')"><span>▥</span><b>Analytics</b></button>
+    <button class="bottom-nav-item" type="button" onclick="showToast('More options will open here.')"><span>•••</span><b>More</b></button>
+  </nav>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/academic-structure.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
